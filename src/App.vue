@@ -18,14 +18,16 @@ watch(useRouterCurrent, () => {
   <el-scrollbar ref="scrollbarRef" height="100vh" always>
     <el-container>
       <el-header class="main-header">
-        <div class="header-logo" style="vertical-align: bottom;">
+        <div class="header-logo">
           <div style="display: flex;justify-content: center;align-items: center;">
             <span class="jname">さんこう绊</span>
             <div class="no">の</div>
-            <span>奶酪</span>
+            <span class="ename">奶酪</span>
           </div>
           <div class="cname">三更绊的奶酪</div>
         </div>
+        <div class="navs"></div>
+        <div class="search&login"></div>
       </el-header>
       <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
       <el-main class="content">
@@ -85,18 +87,19 @@ html {
 
 .header-logo {
   // line-height: 75px;
-  font-size: 2.8rem;
+  font-size: 2.5rem;
 }
 
 .cname {
   opacity: 0;
-  font-size: 1.5rem;
+  font-size: 1rem;
   transition: opacity 0.4s ease-in;
   width: 100%;
   text-align: justify;
   padding: 0 1rem;
   box-sizing: border-box;
   vertical-align: bottom;
+  height: 1rem;
 }
 
 .cname::after {
@@ -106,21 +109,27 @@ html {
 }
 
 .jname {
-  background-color: lightgray;
-  border-radius: 2rem;
+  // background-color: lightgray;
+  border-radius: 1rem;
   padding: .3rem;
 }
-
+.ename{
+      font-family: 'QianTuXiaoTuTi','Merriweather Sans',Helvetica,Tahoma,Arial,'PingFang SC','Hiragino Sans GB','Microsoft Yahei','WenQuanYi Micro Hei',sans-serif;
+}
 .header-logo:hover {
-  color: orangered;
-
   .jname {
-    background-color: orange;
+    background-color: #ffa500;
+    color: white;
+  }
+
+  .ename {
+    color: #ffa500;
   }
 
   .cname {
-    color: orangered;
+    color: #ffa500;
     opacity: 1;
+    font-family: 'Merriweather Sans', Helvetica, Tahoma, Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', 'WenQuanYi Micro Hei', sans-serif;
   }
 
   .no {
