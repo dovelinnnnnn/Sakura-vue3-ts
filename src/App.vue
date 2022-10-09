@@ -1,47 +1,155 @@
-
 <script setup lang="ts">
 import { ref, watch, getCurrentInstance, onMounted, reactive } from "vue"
 import { useRouter } from "vue-router"
 const useRouterCurrent = reactive(useRouter())
 let _this = getCurrentInstance()
-watch(useRouterCurrent, () => {
-  let mainref: any = _this?.refs.scroll
-  if (mainref) {
-    mainref.$el.scrollTop = 0
-    console.log(1);
-  }
-})
-</script>
 
+let utils = _this?.appContext.config.globalProperties.$utils
+var show = ref(false)
+var scroll = (e: any) => {
+  if (e.scrollTop > 80) {
+    show.value = true
+  } else {
+    show.value = false
+  }
+}
+var jumpTo = function (url: string) {
+  useRouterCurrent.push(url)
+}
+var navs = {
+  main: {
+    url: "",
+    cname: "主页",
+    icon: "",
+    children: {}
+  },
+  timeSeries: {
+    url: "",
+    icon: "",
+    cname: "归档",
+    children: {
+      hax: {
+        cname: "技术",
+        icon: "",
+        url: "",
+      },
+      article: {
+        cname: "文章",
+        icon: "",
+        url: "",
+      },
+      movieComment: {
+        cname: "影评",
+        icon: "",
+        url: "",
+      },
+      ideas: {
+        cname: "想法",
+        url: "",
+        icon: "",
+      },
+      notes: {
+        cname: "笔记",
+        url: "",
+        icon: "",
+      }
+    }
+  },
+  list: {
+    cname: "列表",
+    icon: "",
+    url: "",
+    children: {}
+  },
+  comment: {
+    url: "",
+    cname: "评论",
+    icon: "",
+    children: {}
+  },
+  friends: {
+    cname: "朋友",
+    icon: "",
+    url: "",
+    children: {}
+  },
+  donate: {
+    cname: "支持",
+    icon: "",
+    url: "",
+    children: {}
+  },
+  about: {
+    icon: "",
+    cname: "关于",
+    url: "",
+    children: {}
+  },
+  app: {
+    icon: "",
+    cname: "app",
+    url: "",
+    children: {}
+  },
+  Mastodon: {
+    cname: "其他",
+    icon: "",
+    url: "",
+    children: {}
+  },
+}
+</script>
 <template>
   <!-- 导航栏 -->
-  <el-scrollbar ref="scrollbarRef" height="100vh" always>
-    <el-container>
-      <el-header class="main-header">
-        <div class="header-logo">
-          <div style="display: flex;justify-content: center;align-items: center;">
-            <span class="jname">さんこう绊</span>
-            <div class="no">の</div>
-            <span class="ename">奶酪</span>
-          </div>
-          <div class="cname">三更绊的奶酪</div>
+  <el-container ref="scrollbarRef">
+    <el-header class="main-header" :style="show?'background-color: rgba(240, 248, 255, 1);':''">
+      <div class="header-logo">
+        <div class="logo" style="display: flex;justify-content: center;align-items: center;">
+          <span class="jname">さんこう绊</span>
+          <div class="no">の</div>
+          <span class="ename">奶酪</span>
         </div>
-        <div class="navs"></div>
-        <div class="search&login"></div>
-      </el-header>
-      <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
+        <div class="cname">三更绊的奶酪</div>
+      </div>
+      <div class="navs flex flex-wrap items-center " :style="show?'opacity: 1':''">
+        <el-dropdown v-for="nav,key in navs" :hide-on-click="false">
+          <el-button link class="menu-btn" @click="jumpTo(nav.url)">
+            <el-icon>
+
+            </el-icon>{{nav.cname? nav.cname: key}}
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item v-for="secnav,seckey in nav.children" class="menu-btn">
+                <el-button link class="menu-btn" @click="jumpTo(nav.url)">
+                  <el-icon>
+
+                  </el-icon>
+                  {{secnav.cname? secnav.cname: seckey}}
+                </el-button>
+
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div class="search_login">
+        <el-icon style="vertical-align: middle;font-size: 22px;width: 100%;display: flex;justify-content: flex-end;">
+          <Search class="icon" />
+          <Tools class="icon icon-tools" />
+        </el-icon>
+      </div>
+    </el-header>
+    <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
+    <el-scrollbar height="100vh" always @scroll="scroll">
       <el-main class="content">
         <router-view></router-view>
       </el-main>
-    </el-container>
-  </el-scrollbar>
+    </el-scrollbar>
+  </el-container>
 </template>
 
 <style lang="scss">
-html {
-  overflow: hidden;
-}
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -52,30 +160,26 @@ html {
 }
 
 
-
+// 导航栏
 .el-header.main-header {
   height: 8rem;
   display: flex;
   width: 100%;
-  // justify-content: center;
+  justify-content: space-between;
   align-items: center;
   position: fixed;
-  opacity: 0;
-  transition: opacity 0.3s ease-in;
-  background-color: aliceblue;
-}
-
-#app .el-main {
-  padding: 0;
-  margin: 0;
-}
-
-.header-hover {
-  opacity: 1;
+  // opacity: 0;
+  transition: background-color 0.3s ease-in;
+  background-color: rgba(240, 248, 255, 0);
+  z-index: 10;
 }
 
 .main-header:hover {
-  opacity: 1;
+  background-color: rgba(240, 248, 255, 1);
+
+  .navs {
+    opacity: 1;
+  }
 }
 
 .content {
@@ -87,7 +191,9 @@ html {
 
 .header-logo {
   // line-height: 75px;
+  width: 16%;
   font-size: 2.5rem;
+  cursor: url("./assets/imgs/ayuda.cur"), auto;
 }
 
 .cname {
@@ -113,14 +219,18 @@ html {
   border-radius: 1rem;
   padding: .3rem;
 }
-.ename{
-      font-family: 'QianTuXiaoTuTi','Merriweather Sans',Helvetica,Tahoma,Arial,'PingFang SC','Hiragino Sans GB','Microsoft Yahei','WenQuanYi Micro Hei',sans-serif;
+
+.ename {
+  font-family: 'QianTuXiaoTuTi', 'Merriweather Sans', Helvetica, Tahoma, Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', 'WenQuanYi Micro Hei', sans-serif;
 }
+
 .header-logo:hover {
   .jname {
     background-color: #ffa500;
     color: white;
   }
+
+
 
   .ename {
     color: #ffa500;
@@ -149,17 +259,67 @@ html {
   100% {
     transform: rotateZ(360deg);
   }
+}
+
+.icon {
+  border: 1px solid rgba($color: #000000, $alpha: 0.5);
+  margin-right: 10px;
+  border-radius: 50%;
+  padding: 5px;
+  box-sizing: content-box;
+  cursor: url("./assets/imgs/ayuda.cur"), auto;
+
+}
+
+.icon-tools:hover {
+  animation-name: spin;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.navs {
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+
+  ul.el-dropdown-menu {
+    li {
+      cursor: url("./assets/imgs/ayuda.cur"), auto;
+    }
+  }
+
+  .el-dropdown {
+
+    margin-left: 15px;
+    cursor: url("./assets/imgs/ayuda.cur"), auto;
+
+    .el-button {
+      cursor: url("./assets/imgs/ayuda.cur"), auto;
+    }
+
+    .menu-btn {
+      color: #666;
+    }
+
+    .menu-btn:hover {
+      color: #ffa500;
+    }
+
+    .el-dropdown-link {
+      cursor: url("./assets/imgs/ayuda.cur"), auto;
+      color: var(--el-color-primary);
+      display: flex;
+      align-items: center;
+    }
+  }
 
 }
 
 
 
-
-
-
-
-* {
-  padding: 0;
-  margin: 0;
+.search_login {
+  width: 16%;
+  display: flex;
+  align-items: flex-end;
 }
 </style>
