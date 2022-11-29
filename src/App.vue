@@ -18,13 +18,13 @@ var jumpTo = function (url: string) {
 }
 var navs = {
   main: {
-    url: "",
+    url: "/home",
     cname: "主页",
     icon: "",
     children: {}
   },
   timeSeries: {
-    url: "",
+    url: "/login",
     icon: "",
     cname: "归档",
     children: {
@@ -102,7 +102,7 @@ var navs = {
 <template>
   <!-- 导航栏 -->
   <el-container ref="scrollbarRef">
-    <el-header class="main-header" :style="show?'background-color: rgba(240, 248, 255, 1);':''">
+    <el-header class="main-header" :style="show?'background-color: rgba(240, 248, 255, 0.9);':''">
       <div class="header-logo">
         <div class="logo" style="display: flex;justify-content: center;align-items: center;">
           <span class="jname">さんこう绊</span>
@@ -115,7 +115,6 @@ var navs = {
         <el-dropdown v-for="nav,key in navs" :hide-on-click="false">
           <el-button link class="menu-btn" @click="jumpTo(nav.url)">
             <el-icon>
-
             </el-icon>{{nav.cname? nav.cname: key}}
           </el-button>
           <template #dropdown>
@@ -145,6 +144,8 @@ var navs = {
       <el-main class="content">
         <router-view></router-view>
       </el-main>
+    <el-foot>111</el-foot>
+
     </el-scrollbar>
   </el-container>
 </template>
@@ -168,10 +169,10 @@ var navs = {
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  // opacity: 0;
+  // opacity: 0;  
   transition: background-color 0.3s ease-in;
   background-color: rgba(240, 248, 255, 0);
-  z-index: 10;
+  z-index: 8;
 }
 
 .main-header:hover {
